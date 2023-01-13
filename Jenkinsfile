@@ -51,11 +51,15 @@ node{
         sh "${dockerCMD} push devopsmvc/financeme:${tagName}"
             
         }
+    }
         
     stage('Configure and Deploy to the test-server'){
         ansiblePlaybook become: true, credentialsId: 'ansible-pem', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible-playbook.yml'
     }
             
+    stage('Terrform to Creating Infrastructure'){
+        echo 'Terrform to Creating Infrastructure'
+        sh "terrform apply"
     }
 
 }
