@@ -16,8 +16,8 @@
     become : yes
     become_user : root
 
-  # - name: Stop Old Container
-  #   command: docker stop $(docker ps -a -q)
+  - name: Stop Old Container
+    shell: docker stop $(docker ps -a -q)
 
   - name: Deploy Docker Container
-    command: docker run -itd -p 8082:8080 devopsmvc/financeme:1.0  
+    command: docker run -itd -p 8082:8081 devopsmvc/financeme:1.0  
