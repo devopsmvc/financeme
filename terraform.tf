@@ -2,28 +2,47 @@ provider "aws" {
   region = "ap-south-1"
 }
 
-resource "aws_vpc" "terraform" {
+resource "aws_vpc" "terraform_vpc" {
   cidr_block = "10.0.0.0/16"
-}
+  instance_tenancy = "default"
 
-resource "aws_internet_gateway" "terraform" {
-  vpc_id = aws_vpc.terraform.id
-}
-
-resource "aws_route_table" "terraform" {
-  vpc_id = aws_vpc.terraform.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.terraform.id
+  tags = {
+    Name = "terraform_vpc"
+    Location = "Bangalore"
   }
 }
 
-resource "aws_subnet" "terraform" {
-  vpc_id     = aws_vpc.terraform.id
-  cidr_block = "10.0.1.0/24"
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.terraform_vpc.id
 
-  route_table_id = aws_route_table.terraform.id
+  tags = {
+    "Name" = "terraform"
+  }
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.terraform_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    "Name" = "Public route table - terraform"
+  }
+}
+
+resource "aws_subnet" "public" {
+  vpc_id     = aws_vpc.terraform_vpc.id
+  cidr_block = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+
+  tags = {
+    "Name" = "Public-Subnet"
+  } 
+
+  /* route_table_id = aws_route_table.terraform.id */
 }
 
 resource "aws_security_group" "terraform" {
@@ -53,17 +72,37 @@ resource "aws_security_group" "terraform" {
 }
 
 resource "aws_network_interface" "terraform" {
-  subnet_id = aws_subnet.terraform.id
+  subnet_id = aws_subnet.public.id
+  security_groups = [aws_security_group.terraform.id]
+
+  tags = {
+    "Name" = "terraform"
+  }
 }
 
-resource "aws_eip" "terraform" {
+/* resource "aws_eip" "eip_nat" {
   vpc      = true
-  network_interface = aws_network_interface.terraform.id
+
+  tags = {
+    "Name" = "EIP1"
+  }
+  
 }
+
+resource "aws_eip_association" "eip_assoc" {
+    allocation_id = aws_eip.eip_nat.id
+    network_interface_id = aws_network_interface.terraform.id
+  
+} */
 
 resource "aws_instance" "terraform" {
   ami           = "ami-07ffb2f4d65357b42"
   instance_type = "t2.micro"
+  key_name = "devops"
+
+  tags = {
+    "Name" = "Terrform"
+  }
   network_interface {
     device_index = 0
     network_interface_id = aws_network_interface.terraform.id
@@ -75,11 +114,11 @@ resource "aws_instance" "terraform" {
     private_key = file("~/.ssh/id_rsa")
   } */
 
-  provisioner "remote-exec" {
+  /* provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y apache2"
     ]
-  }
+  } */
 }
 
