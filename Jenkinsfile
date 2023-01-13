@@ -57,9 +57,9 @@ node{
         ansiblePlaybook become: true, credentialsId: 'ansible-pem', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible-playbook.yml'
     }
             
-    stage('Terrform to Creating Infrastructure'){
-        echo 'Terrform to Creating Infrastructure'
-        sh "terrform apply"
+    stage('Terraform to Creating Infrastructure'){
+        echo 'Terraform to Creating Infrastructure'
+        sh "terraform apply"
     }
 
 }
