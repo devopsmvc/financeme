@@ -47,7 +47,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_security_group" "terraform" {
   name   = "terraform"
-  vpc_id = aws_vpc.terraform.id
+  vpc_id = aws_vpc.terraform_vpc.id
 
   ingress {
     from_port   = 22
