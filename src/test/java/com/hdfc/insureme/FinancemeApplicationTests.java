@@ -1,17 +1,7 @@
 package com.hdfc.insureme;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.hdfc.financeme.Account;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.http.Method;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest
 class FinancemeApplicationTests {
