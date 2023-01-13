@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "4.50.0"
+    }
+  }
+}
+
 provider "aws" {
   region = "ap-south-1"
   
@@ -101,6 +110,7 @@ resource "aws_instance" "terraform" {
   instance_type = "t2.micro"
   availability_zone = "ap-south-1a"
   key_name = "devops"
+
 
   tags = {
     "Name" = "Terrform"
