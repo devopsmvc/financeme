@@ -1,5 +1,6 @@
 provider "aws" {
   region = "ap-south-1"
+  
 }
 
 resource "aws_vpc" "terraform_vpc" {
@@ -98,6 +99,7 @@ resource "aws_eip_association" "eip_assoc" {
 resource "aws_instance" "terraform" {
   ami           = "ami-07ffb2f4d65357b42"
   instance_type = "t2.micro"
+  availability_zone = "ap-south-1a"
   key_name = "devops"
 
   tags = {
