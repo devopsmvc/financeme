@@ -20,4 +20,4 @@
   #   command: docker stop $(docker ps -a -q)
 
   - name: Deploy Docker Container
-    command: docker run -itd -p 8082:8080 devopsmvc/insureme:2.0  
+    command: docker run -itd -p 8082:8080 devopsmvc/financeme:1.0  

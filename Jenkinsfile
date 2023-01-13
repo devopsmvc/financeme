@@ -12,13 +12,13 @@ node{
         mavenCMD = "${mavenHome}/bin/mvn"
         docker = tool name: 'docker' , type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
         dockerCMD = "${docker}/bin/docker"
-        tagName="2.0"
+        tagName="1.0"
     }
     
     stage('git code checkout'){
         try{
             echo 'checkout the code from git repository'
-            git branch: 'main', url: 'https://github.com/devopsmvc/insureme.git'
+            git branch: 'main', url: 'https://github.com/devopsmvc/financeme.git'
         }
         catch(Exception e){
             echo 'Exception occured in Git Code Checkout Stage'
@@ -41,14 +41,14 @@ node{
     
     stage('Containerize the application'){
         echo 'Creating Docker image'
-        sh "${dockerCMD} build -t devopsmvc/insureme:${tagName} ."
+        sh "${dockerCMD} build -t devopsmvc/financeme:${tagName} ."
     }
     
     stage('Pushing it ot the DockerHub'){
         echo 'Pushing the docker image to DockerHub'
         withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
         sh "${dockerCMD} login -u devopsmvc -p ${dockerhub}"
-        sh "${dockerCMD} push devopsmvc/insureme:${tagName}"
+        sh "${dockerCMD} push devopsmvc/financeme:${tagName}"
             
         }
         
