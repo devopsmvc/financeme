@@ -59,6 +59,7 @@ node{
             
     stage('Terraform to Creating Infrastructure'){
         echo 'Terraform to Creating Infrastructure'
+        sh "terraform init"
         sh "terraform apply -auto-approve"
     }
 
