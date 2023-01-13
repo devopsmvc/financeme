@@ -63,6 +63,15 @@ node{
         sh "terraform apply -auto-approve"
     }
 
+    stage('Install and Configure of Prometheus'){
+        ansiblePlaybook become: true, credentialsId: 'ansible-pem', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'prometheus.yml'
+    }
+
+    stage('Install and COnfigure of Grafaha'){
+        ansiblePlaybook become: true, credentialsId: 'ansible-pem', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'grafana.yml'
+    }    
+
+
 }
 
 

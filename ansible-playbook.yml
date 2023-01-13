@@ -19,5 +19,8 @@
   - name: Stop Old Container
     shell: docker stop $(docker ps -a -q)
 
-  - name: Deploy Docker Container
-    command: docker run -itd -p 8082:8081 devopsmvc/financeme:1.0  
+  - name: Deploying FinanceMe Application Using Docker
+    command: docker run -itd -p 8082:8081 devopsmvc/financeme:1.0
+
+  - name: Deploying node-exporter
+    command: docker run -itd -p 9100:9100 prom/node-exporter
