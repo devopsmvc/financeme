@@ -55,32 +55,24 @@ node{
             
     stage('Terraform to Creating Infrastructure'){
         echo 'Terraform to Creating Infrastructure'
-        steps {
-                sh 'terraform init'
-                sh 'terraform apply -auto-approve'
-                script {
-                    def output = sh returnStdout: true, script: 'terraform output -json'
-                    def data = readJSON text: output
-                    env.EC2_IP = data.public_ip.value
-                }
-            }
+        sh 'terraform init'
+        sh 'terraform apply -auto-approve'
+        script {
+            def output = sh returnStdout: true, script: 'terraform output -json'
+            def data = readJSON text: output
+            env.EC2_IP = data.public_ip.value
+        }
+            
     }
 
     stage('Configure Ansible hosts') {
-        steps {
-            sh "echo ${env.EC2_IP} ansible_user=ec2-user >> inventory"
-            }
+        sh "echo ${env.EC2_IP} ansible_user=ec2-user >> inventory"
         }    
     
     
     stage('Configure and Deploy to the test-server'){
         ansiblePlaybook become: true, credentialsId: 'ansible-pem', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible-playbook.yml'
     }
-
-
-
-    
-
 
 }
 
